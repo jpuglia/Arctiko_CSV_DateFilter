@@ -1,5 +1,36 @@
 
 from sys import exit
+import csv
+import os
+
+def solicitar_ruta():
+   while True:
+      
+      path_directory = input('Ingrese la ruta de la carpeta: \n')
+
+      if os.path.exists(path_directory) is True:
+         return path_directory
+      
+      else:
+         print('Ruta erronea, intente nuevamente.')
+
+def list_files_in_directory(directory):
+    
+    while True:
+    
+      try:
+          # List all files in the specified directory
+          file_list = os.listdir(directory)
+          
+          # Iterate through the list and print each file name
+          for file_name in file_list:
+              print(file_name)
+      
+      except FileNotFoundError:
+          print(f"The directory '{directory}' was not found.")
+      except PermissionError:
+          print(f"Permission denied while accessing '{directory}'.")
+
 
 def main():
 
@@ -34,9 +65,7 @@ def main():
           print(value[0])
 
 def busqueda_mes():
-  import csv
-  import os
-  
+
   meses = {
      "01":"Enero",
      "02":"Febrero",
@@ -54,6 +83,8 @@ def busqueda_mes():
   
   while True:
       
+      solicitar_ruta()
+
       file_path = input("Ingrese la ruta del archivo: \n")
 
       if os.path.isabs(file_path) and os.path.exists(file_path):
