@@ -14,22 +14,36 @@ def solicitar_ruta():
       else:
          print('Ruta erronea, intente nuevamente.')
 
-def list_files_in_directory(directory):
-    
+def list_files_in_directory(path_directory):
+        
     while True:
     
       try:
           # List all files in the specified directory
-          file_list = os.listdir(directory)
+          file_list = os.listdir(path_directory)
+
+          enum = []
+
+          i = 0
+
+          for item in file_list:
+             enum.append(i)
+             i += 1
+
+          file_list_dict = {enum : file_list for enum, file_list in zip(enum, file_list)}
+
+          for index, archivo in file_list_dict.items():
+            if archivo[-3:] == 'txt':
+               print(index, ' - ',archivo)
           
-          # Iterate through the list and print each file name
-          for file_name in file_list:
-              print(file_name)
-      
+          return file_list_dict
+
       except FileNotFoundError:
-          print(f"The directory '{directory}' was not found.")
+          print(f"La carpeta '{path_directory}' no fue encontrada.")
       except PermissionError:
-          print(f"Permission denied while accessing '{directory}'.")
+          print(f"No se tiene permiso para acceder a la carpeta: '{path_directory}'.")
+
+
 
 
 def main():
@@ -55,16 +69,16 @@ def main():
      
      except ValueError:
        print ("Ingrese una opcion valida.")
-       print("Menu:")
-       for value in dict_menu.values():
-          print(value[0])
 
      except TypeError:
        print("Ingrese una opcion valida.")
-       for value in dict_menu.values():
-          print(value[0])
+       
 
 def busqueda_mes():
+  
+  dir_path = solicitar_ruta()
+
+  list_files_in_directory(dir_path)
 
   meses = {
      "01":"Enero",
@@ -80,27 +94,21 @@ def busqueda_mes():
      "11":"Noviembre",
      "12":"Enero"
   }
-  
-  while True:
-      
-      solicitar_ruta()
 
-      list_files_in_directory(solicitar_ruta())
+  while True: 
+     nom_file = input('Seleccione un archivo: \n')
 
-      file_path = input("Ingrese la ruta del archivo: \n")
+     try:
+      file_path = '/'.join([dir_path,list_files_in_directory.get(nom_file)])
+      print(file_path)
+      break
+     
+     except ValueError:
+        print('Ingrese un valor del listado')
 
-      if os.path.isabs(file_path) and os.path.exists(file_path):
-          print(f"Ruta ingresada correctamente: {file_path}")
-          break
-      
-      else:
-          print("Ruta invalida, intentelo nuevamente: ")
 
-  
   mes_deseado = input("Introduce el mes (formato mm): \n")
   equipo = input("Introduce el codigo del equipo: \n")
-
-  
 
   archivo_salida = f' {meses.get(mes_deseado)}_{equipo}.txt'
 
