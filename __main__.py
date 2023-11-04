@@ -85,6 +85,8 @@ def busqueda_mes():
       
       solicitar_ruta()
 
+      list_files_in_directory(solicitar_ruta())
+
       file_path = input("Ingrese la ruta del archivo: \n")
 
       if os.path.isabs(file_path) and os.path.exists(file_path):
