@@ -3,6 +3,7 @@ from sys import exit
 import csv
 import os
 
+
 def solicitar_ruta():
    while True:
       
@@ -21,6 +22,7 @@ def list_files_in_directory(path_directory):
       try:
           # List all files in the specified directory
           file_list = os.listdir(path_directory)
+          file_list = [archivo for archivo in file_list if archivo.endswith(".txt")]
 
           enum = []
 
@@ -33,8 +35,8 @@ def list_files_in_directory(path_directory):
           file_list_dict = {enum : file_list for enum, file_list in zip(enum, file_list)}
 
           for index, archivo in file_list_dict.items():
-            if archivo[-3:] == 'txt':
-               print(index, ' - ',archivo)
+            print(index, ' - ',archivo)
+
           
           return file_list_dict
 
@@ -42,8 +44,6 @@ def list_files_in_directory(path_directory):
           print(f"La carpeta '{path_directory}' no fue encontrada.")
       except PermissionError:
           print(f"No se tiene permiso para acceder a la carpeta: '{path_directory}'.")
-
-
 
 
 def main():
@@ -65,20 +65,22 @@ def main():
 
      try:
        print("Ha seleccionado:", dict_menu.get(int(seleccion))[0])
-       return dict_menu.get(int(seleccion))[1]()
+       dict_menu.get(int(seleccion))[1]()
      
      except ValueError:
        print ("Ingrese una opcion valida.")
+       main()
 
      except TypeError:
        print("Ingrese una opcion valida.")
+       main()
        
 
 def busqueda_mes():
   
   dir_path = solicitar_ruta()
 
-  list_files_in_directory(dir_path)
+  dir_list = list_files_in_directory(dir_path)
 
   meses = {
      "01":"Enero",
@@ -95,18 +97,24 @@ def busqueda_mes():
      "12":"Enero"
   }
 
-  while True: 
-     nom_file = input('Seleccione un archivo: \n')
+  while True:
+     nom_file = input('Seleccione el numero del archivo que desea abrir: \n')
 
      try:
-      file_path = '/'.join([dir_path,list_files_in_directory.get(nom_file)])
-      print(file_path)
-      break
-     
+        file_path = "\\".join([dir_path, dir_list.get(float(nom_file))])
+        print(file_path)
+        break      
+
      except ValueError:
-        print('Ingrese un valor del listado')
+        print('Seleccione un valor dentro del listado')
 
+     except KeyError: 
+        print('Ingrese un valor valido')
 
+     except TypeError:
+        print('Ingrese un valor valido')
+
+  
   mes_deseado = input("Introduce el mes (formato mm): \n")
   equipo = input("Introduce el codigo del equipo: \n")
 
@@ -134,6 +142,8 @@ def busqueda_mes():
             filas_seleccionadas.append(fila)
       
     escritor_txt.writerows(filas_seleccionadas)
+
+    print('Su archivo fue procesado con exito, lo encontrara en la carpeta de condiciones ambientales')
 
   while True:
   
