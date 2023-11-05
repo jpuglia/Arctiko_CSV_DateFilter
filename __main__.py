@@ -145,6 +145,13 @@ def busqueda_mes():
 
     print('Su archivo fue procesado con exito, lo encontrara en la carpeta de condiciones ambientales')
 
+    salida()
+
+
+
+
+def salida():
+
   while True:
   
     opcion = input("Gracias por utilizar el programa. Desea realizar una nueva busqueda? (y/n)\n")
